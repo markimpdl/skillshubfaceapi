@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FaceApi.Services
 {
-    public class PresenceService
+    public class PresenceService : IPresenceService
     {
         private readonly ApiDbContext _db;
         public PresenceService(ApiDbContext db) => _db = db;

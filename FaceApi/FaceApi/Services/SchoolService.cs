@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FaceApi.Services
 {
-    public class SchoolService
+    public class SchoolService : ISchoolService
     {
         private readonly ApiDbContext _db;
         public SchoolService(ApiDbContext db) => _db = db;

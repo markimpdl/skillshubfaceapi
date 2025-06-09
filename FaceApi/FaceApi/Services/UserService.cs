@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FaceApi.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly ApiDbContext _db;
         public UserService(ApiDbContext db) => _db = db;
