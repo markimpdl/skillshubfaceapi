@@ -1,4 +1,5 @@
 ﻿using FaceApi.Data;
+using FaceApi.DTOs;
 using FaceApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +27,10 @@ namespace FaceApi.Controllers
         }
 
         [HttpPost("checkin")]
-        public async Task<IActionResult> Checkin([FromForm] int schoolId, [FromForm] IFormFile photo)
+        public async Task<IActionResult> Checkin([FromForm] PresenceCheckinDto dto)
         {
             // 1. Detectar o rosto na foto do check-in
-            using var stream = photo.OpenReadStream();
+            using var stream = dto.Photo.OpenReadStream();
             string faceId;
             try
             {
@@ -41,7 +42,7 @@ namespace FaceApi.Controllers
             }
 
             // 2. Identificar o professor no grupo da escola
-            string groupId = $"escola_{schoolId}";
+            string groupId = $"escola_{dto.SchoolId}";
             string personId = await _faceService.IdentifyAsync(groupId, faceId);
 
             if (personId == null)
@@ -50,13 +51,13 @@ namespace FaceApi.Controllers
             // 3. Encontrar o professor vinculado a esse personId
             var userSchool = await _db.UserSchools
                 .Include(us => us.User)
-                .FirstOrDefaultAsync(us => us.SchoolId == schoolId && us.User.AzurePersonId == personId);
+                .FirstOrDefaultAsync(us => us.SchoolId == dto.SchoolId && us.User.AzurePersonId == personId);
 
             if (userSchool == null)
                 return NotFound("Professor não encontrado nesta escola.");
 
             // 4. Registrar presença no banco (service)
-            var record = await _presenceService.RegisterAsync(userSchool.UserId, schoolId);
+            var record = await _presenceService.RegisterAsync(userSchool.UserId, dto.SchoolId);
 
             return Ok(new
             {

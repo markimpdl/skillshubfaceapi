@@ -1,8 +1,8 @@
 ﻿namespace FaceApi.DTOs
 {
-    public class PresenceRegisterDto
+    public class PresenceCheckinDto
     {
-        public int UserId { get; set; }
         public int SchoolId { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }

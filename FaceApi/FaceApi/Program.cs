@@ -15,10 +15,11 @@ builder.Services.AddIdentity<AdministratorUser, IdentityRole>()
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<SchoolService>();
 builder.Services.AddScoped<PresenceService>();
-builder.Services.AddScoped<IAzureFaceService, AzureFaceService>();
-builder.Services.AddScoped<IPresenceService, PresenceService>();
 builder.Services.AddScoped<ISchoolService, SchoolService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddHttpClient<IAzureFaceService, AzureFaceService>(); builder.Services.AddScoped<IPresenceService, PresenceService>();
+builder.Services.AddScoped<IAzureBlobService, AzureBlobService>();
 
 builder.Services.AddAuthentication(options =>
 {
