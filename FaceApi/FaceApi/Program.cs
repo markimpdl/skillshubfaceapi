@@ -1,5 +1,6 @@
 using FaceApi.Data;
 using FaceApi.Models;
+using FaceApi.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,14 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 builder.Services.AddIdentity<AdministratorUser, IdentityRole>()
     .AddEntityFrameworkStores<ApiDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<SchoolService>();
+builder.Services.AddScoped<PresenceService>();
+builder.Services.AddScoped<IAzureFaceService, AzureFaceService>();
+builder.Services.AddScoped<IPresenceService, PresenceService>();
+builder.Services.AddScoped<ISchoolService, SchoolService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication(options =>
 {
