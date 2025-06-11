@@ -55,3 +55,4 @@ nunit-*.xml
 /.vs
 /FaceApi/.vs/FaceApi
 /FaceApi/FaceApi/appsettings.json
+/FaceApi/FaceApi/appsettings.Development.json
