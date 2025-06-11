@@ -54,3 +54,4 @@ TestResult.xml
 nunit-*.xml
 /.vs
 /FaceApi/.vs/FaceApi
+/FaceApi/FaceApi/appsettings.json
