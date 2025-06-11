@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 
 namespace FaceApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<AdministratorUser> _userManager;
@@ -28,7 +29,7 @@ namespace FaceApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            var user = new AdministratorUser { UserName = dto.Username, Email = dto.Email };
+            var user = new AdministratorUser { Email = dto.Email, UserName = dto.Email };
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
@@ -52,7 +53,7 @@ namespace FaceApi.Controllers
 
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
-                _config["Jwt:Issuer"],
+                _config["Jwt:Audience"],
                 expires: DateTime.Now.AddHours(8),
                 signingCredentials: creds
             );

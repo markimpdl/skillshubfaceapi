@@ -51,7 +51,7 @@ namespace FaceApi.Controllers
             // 3. Encontrar o professor vinculado a esse personId
             var userSchool = await _db.UserSchools
                 .Include(us => us.User)
-                .FirstOrDefaultAsync(us => us.SchoolId == dto.SchoolId && us.User.AzurePersonId == personId);
+                .FirstOrDefaultAsync(us => us.SchoolId == dto.SchoolId && us.AzurePersonId == personId);
 
             if (userSchool == null)
                 return NotFound("Professor não encontrado nesta escola.");

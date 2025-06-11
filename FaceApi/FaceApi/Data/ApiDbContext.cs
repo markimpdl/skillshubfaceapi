@@ -1,16 +1,15 @@
 ﻿using FaceApi.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
+
 
 namespace FaceApi.Data
 {
     public class ApiDbContext : IdentityDbContext<AdministratorUser>
     {
         public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { }
-
-        public DbSet<School> Schools { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<School> Schools { get; set; }
         public DbSet<UserSchool> UserSchools { get; set; }
         public DbSet<PresenceRecord> PresenceRecords { get; set; }
 
@@ -20,13 +19,10 @@ namespace FaceApi.Data
             builder.Entity<UserSchool>()
                 .HasKey(us => new { us.UserId, us.SchoolId });
             builder.Entity<UserSchool>()
-                .HasOne(us => us.User)
-                .WithMany(u => u.UserSchools)
-                .HasForeignKey(us => us.UserId);
+                .HasOne(us => us.User).WithMany(u => u.UserSchools).HasForeignKey(us => us.UserId);
             builder.Entity<UserSchool>()
-                .HasOne(us => us.School)
-                .WithMany(s => s.UserSchools)
-                .HasForeignKey(us => us.SchoolId);
+                .HasOne(us => us.School).WithMany(s => s.UserSchools).HasForeignKey(us => us.SchoolId);
         }
     }
+
 }

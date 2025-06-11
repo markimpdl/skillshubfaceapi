@@ -23,16 +23,26 @@ namespace FaceApi.Services
             _http.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", Key);
         }
 
-        // Criar grupo (para cada escola)
         public async Task CreatePersonGroupAsync(string groupId, string name)
         {
             AddHeaders();
             var url = $"{Endpoint}/face/v1.0/persongroups/{groupId}";
             var data = new { name };
+
             var res = await _http.PutAsJsonAsync(url, data);
-            if (!res.IsSuccessStatusCode && res.StatusCode != System.Net.HttpStatusCode.Conflict)
-                throw new Exception("Erro ao criar PersonGroup");
+
+            // Se for 409, o grupo já existe: não é um erro fatal, só continue
+            if (res.StatusCode == System.Net.HttpStatusCode.Conflict)
+                return;
+
+            // Se não for sucesso, lance a exceção
+            if (!res.IsSuccessStatusCode)
+            {
+                var err = await res.Content.ReadAsStringAsync();
+                throw new Exception($"Erro ao criar PersonGroup: {res.StatusCode} - {err}");
+            }
         }
+
 
         // Criar pessoa (person) no grupo
         public async Task<string> CreatePersonAsync(string groupId, string personName)
